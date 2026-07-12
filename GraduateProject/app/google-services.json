@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "147250749592",
+    "project_id": "techadvisor-39fa7",
+    "storage_bucket": "techadvisor-39fa7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147250749592:android:6478cb844ad77a5e65f0ed",
+        "android_client_info": {
+          "package_name": "com.example.graduateproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147250749592-12i731v1hgi3qf74bghkui7dug5rq65f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.graduateproject",
+            "certificate_hash": "12f44db2ee70e3bd5c638cdf3ce75c9dd43f3702"
+          }
+        },
+        {
+          "client_id": "147250749592-o8k0u494nobq9ksgnifjveft32o8juth.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-bJ7t-dy7ECGN3sn8LSX-LovccNmyK9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "147250749592-o8k0u494nobq9ksgnifjveft32o8juth.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

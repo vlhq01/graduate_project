@@ -1,3 +1,6 @@
 .env
 __pycache__/
 .idea/
+target/
+*.class
+firebase-service-account.json
