@@ -31,11 +31,11 @@ public class DataSeeder implements CommandLineRunner {
             InputStream inputStream = TypeReference.class.getResourceAsStream("/products_test.json");
 
             try {
-                List<Product> products = mapper.readValue(inputStream, new TypeReference<List<Product>>(){});
+                List<Product> products = mapper.readValue(inputStream, new TypeReference<List<Product>>() {
+                });
                 productRepository.saveAll(products);
                 System.out.println("✅✅✅ BƠM DATA THÀNH CÔNG! Đã lưu " + products.size() + " sản phẩm vào DB!");
 
-                // --- ĐOẠN MA THUẬT MỚI THÊM VÀO ---
                 System.out.println("🤖 Đang gọi AI Server để tạo Vector Embedding (Vui lòng chờ 1-2 phút)...");
                 try {
                     Map<String, Object> aiResponse = aiServiceClient.syncEmbeddings();

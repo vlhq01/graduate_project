@@ -11,7 +11,6 @@ data class HomeState(
     val isLoading: Boolean = false,
     val categories: PersistentList<String> = persistentListOf(),
     val selectedCategory: String = "All",
-    val products: PersistentList<Product> = persistentListOf(),
     val error: String? = null,
     val searchQuery: String = "",
     val isSearchActive: Boolean = false,
@@ -23,6 +22,7 @@ data class HomeState(
         "AirPods",
         "Apple Watch"
     ),
+    val searchSuggestions: PersistentList<Product> = persistentListOf()
 ) {
     val isShowSearchResults: Boolean get() = searchQuery.isNotEmpty()
 }

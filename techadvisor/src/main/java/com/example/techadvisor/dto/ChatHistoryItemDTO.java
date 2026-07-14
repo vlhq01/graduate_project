@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatHistoryItemDTO {
-    private String role;    // "user" or "assistant"
+    private String role;
     private String content;
 }

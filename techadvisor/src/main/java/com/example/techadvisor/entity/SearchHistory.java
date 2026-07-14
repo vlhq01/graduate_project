@@ -2,6 +2,7 @@ package com.example.techadvisor.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.time.OffsetDateTime;
 
 @Entity
@@ -22,7 +23,6 @@ public class SearchHistory {
     @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime createdAt;
 
-    // Tự động gán thời gian hiện tại trước khi lưu vào DB
     @PrePersist
     protected void onCreate() {
         this.createdAt = OffsetDateTime.now();

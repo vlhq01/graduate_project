@@ -26,12 +26,14 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -103,6 +105,10 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.graduateproject.R
@@ -135,6 +141,8 @@ fun HomeScreen(
     val context = LocalContext.current
     val homeState by homeViewModel.state.collectAsState()
     val focusManager = LocalFocusManager.current
+    val pagingProducts = homeViewModel.productsPagingFlow.collectAsLazyPagingItems()
+
 
     var currentDialog by remember { mutableStateOf(AuthDialogType.NONE) }
 
@@ -235,7 +243,9 @@ fun HomeScreen(
 
             Box(modifier = Modifier.weight(1f)) {
 
-                ProductStaggeredGrid(products = homeState.products, onClick = onProductClick)
+
+
+                ProductStaggeredGrid(products = pagingProducts, onClick = onProductClick)
 
                 if (homeState.isSearchActive) {
                     Box(
@@ -599,6 +609,46 @@ fun ProductStaggeredGrid(products: List<Product>, onClick: (String) -> Unit) {
     ) {
         items(products) { product ->
             ProductCard(product = product, onClick = onClick)
+        }
+    }
+}
+
+@Composable
+fun ProductStaggeredGrid(
+    products: LazyPagingItems<Product>, // Đổi kiểu dữ liệu ở đây
+    onClick: (String) -> Unit
+) {
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalItemSpacing = 16.dp
+    ) {
+        // Cách dùng items với Paging 3
+        items(
+            count = products.itemCount,
+            key = products.itemKey { it.id } // Giả sử Product có id
+        ) { index ->
+            val product = products[index]
+            if (product != null) {
+                ProductCard(product = product, onClick = onClick)
+            }
+        }
+
+        // Handle UI khi đang load thêm trang mới (cuộn xuống cuối)
+        when (products.loadState.append) {
+            is LoadState.Loading -> {
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    CircularProgressIndicator(modifier = Modifier.wrapContentSize())
+                }
+            }
+            is LoadState.Error -> {
+                item(span = StaggeredGridItemSpan.FullLine) {
+                    Text("Lỗi khi tải thêm dữ liệu!")
+                }
+            }
+            else -> {}
         }
     }
 }
@@ -1681,8 +1731,7 @@ fun SearchOverlayPanel(
                 )
 
                 LazyColumn {
-                    // Dùng tạm list products cho gợi ý
-                    items(state.products.take(3)) { product ->
+                    items(state.searchSuggestions) { product ->
                         SearchResultItem(
                             product = product,
                             searchQuery = "",

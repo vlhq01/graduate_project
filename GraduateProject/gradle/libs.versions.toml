@@ -16,6 +16,7 @@ ksp = "2.3.2"
 materialIconsExtended = "1.7.8"
 navigationCompose = "2.9.7"
 kotlinxSerialization = "1.10.0"
+pagingCompose = "3.5.0"
 retrofit = "3.0.0"
 coil = "2.7.0"
 firebaseBom = "34.10.0"
@@ -30,6 +31,7 @@ googleid = "1.2.0"
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -22,21 +22,25 @@ public class ProductController {
     }
 
     @GetMapping(value = "/categories", produces = "application/json")
-    public List<String> getAllCategories() { return productService.getAllCategories(); }
+    public List<String> getAllCategories() {
+        return productService.getAllCategories();
+    }
 
-    @GetMapping(value = "/{id}",produces = "application/json")
+    @GetMapping(value = "/{id}", produces = "application/json")
     public ProductDTO getProductById(@PathVariable String id) {
         return productService.getProductById(id);
     }
 
-    @GetMapping(value = "/{id}/similar",produces = "application/json")
+    @GetMapping(value = "/{id}/similar", produces = "application/json")
     public List<ProductDTO> getSimilarProducts(@PathVariable String id) {
         return productService.getSimilarProducts(id);
     }
 
     @GetMapping(value = "/homescreen", produces = "application/json")
     public List<ProductDTO> getHomeScreenRecommendationProducts(
-            @RequestParam(value = "category", required = false) String category) {
+            @RequestParam(value = "category", required = false) String category,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "limit", defaultValue = "10") int limit) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String userId = null;
@@ -45,7 +49,7 @@ public class ProductController {
         }
 
         // Truyền thêm category xuống Service
-        return productService.getHomeRecommendations(userId, category);
+        return productService.getHomeRecommendations(userId, category, page, limit);
     }
 
     @GetMapping(value = "/search", produces = "application/json")

@@ -2,6 +2,7 @@ package com.example.techadvisor.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.time.OffsetDateTime;
 
 @Entity

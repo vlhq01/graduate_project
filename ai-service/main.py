@@ -1,29 +1,26 @@
-from fastapi import FastAPI, Depends, HTTPException
+from typing import Any
+
+import uvicorn
+from fastapi import Depends
+from fastapi import FastAPI, HTTPException
+from fastapi import Path
+from pydantic import BaseModel
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from core.database import get_db, engine
+from core.database import get_db
 from model import product
 from model.product import Product
 from services.ai_service import get_embedding
-
 from services.chatservice import generate_chat_response
-import uvicorn
-
-from pydantic import BaseModel
-from sqlalchemy import text
-from fastapi import Depends
-
-from fastapi import Path
-
-from typing import Any
 
 
-
-# Đây chính là DTO hứng dữ liệu từ Spring Boot gửi sang
 class SearchRequest(BaseModel):
-    query: str  # Từ khóa user gõ (VD: "iphone 16 128gb")
+    query: str
     limit: int = 10
     category: str = None
+
+
 app = FastAPI(title="TechAdvisor AI Service")
 
 
@@ -31,12 +28,10 @@ app = FastAPI(title="TechAdvisor AI Service")
 def search_products(req: SearchRequest, db: Session = Depends(get_db)):
     query_vector = get_embedding(req.query)
 
-    # Tạo câu WHERE động dựa vào category
     category_filter = ""
     params = {"query": req.query, "vec": str(query_vector), "limit": req.limit}
 
     if req.category:
-        # Nếu có chọn Tab Category, bắt buộc DB chỉ được lọc những sản phẩm đó
         category_filter = "WHERE category = :cat"
         params["cat"] = req.category
 
@@ -53,12 +48,9 @@ def search_products(req: SearchRequest, db: Session = Depends(get_db)):
     return [row.id for row in result]
 
 
-
-
 @app.get("/api/health")
 def health_check(db: Session = Depends(get_db)):
     try:
-        # Thử chạy 1 lệnh SQL đếm số lượng product
         product_count = db.query(product.Product).count()
         return {
             "status": "ok",
@@ -75,10 +67,8 @@ def health_check(db: Session = Depends(get_db)):
 @app.post("/api/admin/sync-embeddings")
 def sync_product_embeddings(db: Session = Depends(get_db)):
     try:
-        # Bắt buộc phải có flush=True để nó xuyên qua buffer của Docker, hiện log ngay lập tức
         print("🚀 BẮT ĐẦU CHẠY SYNC FUNCTION...", flush=True)
 
-        # MẸO: Thêm .limit(10) để test thử 10 sản phẩm trước. Đừng nhét 3000 cái 1 lúc nó sẽ treo!
         products = db.query(Product).filter(Product.embedding.is_(None)).all()
 
         if not products:
@@ -98,7 +88,7 @@ def sync_product_embeddings(db: Session = Depends(get_db)):
 
             p.embedding = vector
             count += 1
-            print(f"-> Đã tạo vector xong cho: {p.name}", flush=True)  # In ra từng cái một
+            print(f"-> Đã tạo vector xong cho: {p.name}", flush=True)
 
         db.commit()
 
@@ -112,19 +102,16 @@ def sync_product_embeddings(db: Session = Depends(get_db)):
 
 
 class RecommendRequest(BaseModel):
-    query: str  # Ví dụ: "Điện thoại pin trâu giá rẻ"
+    query: str
     limit: int = 5
 
 
 @app.post("/api/recommend")
 def get_recommendations(req: RecommendRequest, db: Session = Depends(get_db)):
-    # 1. Biến câu yêu cầu của user thành Vector
     query_vector = get_embedding(req.query)
 
-    # 2. Ép kiểu vector thành chuỗi để đưa vào SQL
     vector_str = str(query_vector)
 
-    # 3. Câu lệnh SQL ma thuật của pgvector (Dùng toán tử <=> để tính khoảng cách Cosine)
     sql_query = text("""
         SELECT id, name, brand, category, price,
                1 - (embedding <=> :vec) AS similarity_score
@@ -133,10 +120,8 @@ def get_recommendations(req: RecommendRequest, db: Session = Depends(get_db)):
         LIMIT :limit
     """)
 
-    # 4. Thực thi truy vấn
     result = db.execute(sql_query, {"vec": vector_str, "limit": req.limit}).fetchall()
 
-    # 5. Format kết quả trả về
     recommendations = []
     for row in result:
         recommendations.append({
@@ -144,7 +129,7 @@ def get_recommendations(req: RecommendRequest, db: Session = Depends(get_db)):
             "name": row.name,
             "brand": row.brand,
             "price": row.price,
-            "match_score": round(row.similarity_score * 100, 2)  # Tính ra phần trăm giống nhau
+            "match_score": round(row.similarity_score * 100, 2)
         })
 
     return {
@@ -156,6 +141,7 @@ def get_recommendations(req: RecommendRequest, db: Session = Depends(get_db)):
 class ChatHistoryItem(BaseModel):
     role: str
     content: str
+
 
 class ChatRequest(BaseModel):
     message: str
@@ -177,12 +163,14 @@ CATEGORY_KEYWORDS = {
     "headphone": ["tai nghe", "headphone", "earbud"],
 }
 
+
 def detect_category(message: str) -> str | None:
     text = message.lower()
     for category, keywords in CATEGORY_KEYWORDS.items():
         if any(keyword in text for keyword in keywords):
             return category
     return None
+
 
 @app.post("/api/chat")
 def chat_with_ai(req: ChatRequest, db: Session = Depends(get_db)):
@@ -250,10 +238,6 @@ def get_similar_products(
         limit: int = 4,
         db: Session = Depends(get_db)
 ):
-    # MA THUẬT SQL NẰM Ở ĐÂY:
-    # 1. Lấy vector của chính cái 'product_id' đó ra.
-    # 2. Tính khoảng cách Cosine (<=>) giữa vector đó với toàn bộ sản phẩm trong bảng.
-    # 3. Loại trừ chính nó ra khỏi kết quả (id != :p_id).
     sql_query = text("""
         SELECT id 
         FROM products 
@@ -262,10 +246,8 @@ def get_similar_products(
         LIMIT :limit
     """)
 
-    # Thực thi Query
     result = db.execute(sql_query, {"p_id": product_id, "limit": limit}).fetchall()
 
-    # Trả về mảng ID cho Spring Boot (VD: ["phone_1", "laptop_5", ...])
     return [row.id for row in result]
 
 

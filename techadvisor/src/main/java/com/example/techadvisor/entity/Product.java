@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
 import java.util.List;
 import java.util.Map;
 
@@ -38,11 +39,10 @@ public class Product {
 
     @Data
     public static class Price {
-        private Double usd; // Giá hiện tại bán
-        private Double original; // Giá gốc (có thể null nếu không sale)
+        private Double usd;
+        private Double original;
     }
 
-    // Lớp nội (Inner class) để map cái review
     @Data
     public static class Review {
         private String user;

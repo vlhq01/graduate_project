@@ -9,7 +9,7 @@ public class WorkspaceItemDTO {
     private String name;
     private String brand;
 
-    private Product.Price price; // Sửa priceUsd thành đối tượng Price
+    private Product.Price price;
 
     private String thumbnailUrl;
     private Double rating;

@@ -17,13 +17,10 @@ public class ChatController {
     @Autowired
     private ChatService chatService;
 
-    // Hàm lấy ID từ Token
     private String getCurrentUserId() {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    // API 1: Lấy lịch sử chat (Để Android vuốt lên tải thêm)
-    // Link gọi: GET /api/chat/history?page=0&size=20
     @GetMapping("/history")
     public ResponseEntity<List<ChatMessageDTO>> getHistory(
             @RequestParam(defaultValue = "0") int page,
@@ -34,13 +31,11 @@ public class ChatController {
         return ResponseEntity.ok(history);
     }
 
-    // API 2: Nhắn tin cho AI
-    // Link gọi: POST /api/chat/send
+
     @PostMapping("/send")
     public ResponseEntity<ChatMessageDTO> sendMessage(@RequestBody ChatRequestDTO requestDTO) {
         String userId = getCurrentUserId();
 
-        // Gọi Service xử lý, lưu DB và nhả ra câu trả lời của AI
         ChatMessageDTO aiResponse = chatService.processUserMessage(userId, requestDTO.getMessage());
 
         return ResponseEntity.ok(aiResponse);

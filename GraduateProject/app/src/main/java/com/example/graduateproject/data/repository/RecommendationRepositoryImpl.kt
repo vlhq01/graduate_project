@@ -8,16 +8,24 @@ import javax.inject.Inject
 class RecommendationRepositoryImpl @Inject constructor(
     private val recommendationApi: RecommendationApiService
 ) : RecommendationRepository {
-    override suspend fun getHomeScreenProducts(category: String?): Result<List<Product>> {
-
+    override suspend fun getHomeScreenProducts(
+        category: String?,
+        page: Int,
+        pageSize: Int
+    ): Result<List<Product>> {
         return try {
             val serverCategory = if (category == "All") null else category
 
-            val response = recommendationApi.getHomeScreenProducts(serverCategory)
+            // Truyền page và pageSize vào hàm gọi API
+            val response = recommendationApi.getHomeScreenProducts(
+                category = serverCategory,
+                page = page,
+                limit = pageSize
+            )
 
             if (response.isSuccessful) {
                 val products = response.body() ?: emptyList()
-                Result.success(products) // Nhận gì thì quăng lên UI cái đó!
+                Result.success(products)
             } else {
                 Result.failure(Exception("Lỗi API sếp ơi: ${response.code()}"))
             }

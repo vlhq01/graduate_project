@@ -1,20 +1,19 @@
 import os
-from groq import Groq
-from dotenv import load_dotenv
 
-# Đọc API Key từ file .env
+from dotenv import load_dotenv
+from groq import Groq
+
 load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Khởi tạo client
 client = Groq(api_key=GROQ_API_KEY)
 
 
 def generate_chat_response(
-    user_message: str,
-    product_context: str,
-    history: list[dict] | None = None,
-    context: dict | None = None
+        user_message: str,
+        product_context: str,
+        history: list[dict] | None = None,
+        context: dict | None = None
 ) -> str:
     history = history or []
     context = context or {}

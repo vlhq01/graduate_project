@@ -11,12 +11,10 @@ public class AiClientConfig {
 
     @Bean
     public AiServiceClient aiServiceClient() {
-        // 1. Cài đặt địa chỉ Server Python
         RestClient restClient = RestClient.builder()
                 .baseUrl("http://ai-service:8000")
                 .build();
 
-        // 2. Tự động sinh ra code cho cái Interface của bạn
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();
 

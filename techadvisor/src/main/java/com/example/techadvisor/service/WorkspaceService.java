@@ -1,13 +1,11 @@
 package com.example.techadvisor.service;
 
 import com.example.techadvisor.dto.ProductDTO;
-import com.example.techadvisor.dto.WorkspaceItemDTO;
 import com.example.techadvisor.entity.Product;
 import com.example.techadvisor.entity.WorkspaceItem;
 import com.example.techadvisor.mapper.ProductMapper;
 import com.example.techadvisor.repository.ProductRepository;
 import com.example.techadvisor.repository.WorkspaceItemRepository;
-import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -12,7 +12,6 @@ import org.springframework.web.service.annotation.PostExchange;
 import java.util.List;
 import java.util.Map;
 
-// url trỏ thẳng tới server Python của bạn
 @HttpExchange("/api")
 public interface AiServiceClient {
 

@@ -14,14 +14,13 @@ import java.time.OffsetDateTime;
 public class User {
 
     @Id
-    private String id; // Cột này sẽ lưu Firebase UID
+    private String id;
 
     private String email;
     private String phoneNumber;
     private String name;
     private String avatarUrl;
 
-    // Lưu thời gian tạo tài khoản
     @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime createdAt;
 }

@@ -20,11 +20,16 @@ import java.util.stream.Collectors;
 @Service
 public class ChatService {
 
-    @Autowired private ChatMessageRepository chatRepo;
-    @Autowired private AiServiceClient aiServiceClient;
-    @Autowired private ProductRepository productRepository;
-    @Autowired private ProductMapper productMapper;
-    @Autowired private ChatMessageMapper chatMessageMapper;
+    @Autowired
+    private ChatMessageRepository chatRepo;
+    @Autowired
+    private AiServiceClient aiServiceClient;
+    @Autowired
+    private ProductRepository productRepository;
+    @Autowired
+    private ProductMapper productMapper;
+    @Autowired
+    private ChatMessageMapper chatMessageMapper;
 
     public List<ChatMessageDTO> getChatHistory(String userId, int page, int size) {
         return chatRepo.findByUserIdOrderByCreatedAtDesc(userId, PageRequest.of(page, size))

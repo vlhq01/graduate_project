@@ -7,8 +7,8 @@ import java.util.List;
 @Data
 public class ChatMessageDTO {
     private Long id;
-    private String senderType; // "USER" hoặc "AI"
+    private String senderType;
     private String content;
-    private String createdAt; // Trả về dạng chuỗi ISO 8601 để Android dễ hiển thị
+    private String createdAt;
     private List<ProductDTO> suggestedProducts;
 }

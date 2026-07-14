@@ -3,6 +3,7 @@ package com.example.techadvisor.entity;
 import com.example.techadvisor.utils.StringListConverter;
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -12,14 +13,14 @@ import java.util.List;
 public class ChatMessage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Báo cho Spring biết đây là khóa tự tăng (SERIAL)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "user_id", nullable = false)
     private String userId;
 
     @Column(name = "sender_type", nullable = false)
-    private String senderType; // Sẽ lưu "USER" hoặc "AI"
+    private String senderType;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;

@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-    // JpaRepository đã có sẵn hàm findById(String id) nên ta không cần viết thêm gì
 }

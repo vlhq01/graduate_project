@@ -86,4 +86,6 @@ dependencies {
     implementation(libs.firebase.messaging)
 
     implementation(libs.androidx.appcompat)
+
+    implementation(libs.androidx.paging.compose)
 }

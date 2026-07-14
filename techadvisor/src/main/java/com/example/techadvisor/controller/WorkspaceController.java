@@ -1,9 +1,6 @@
 package com.example.techadvisor.controller;
 
 import com.example.techadvisor.dto.ProductDTO;
-import com.example.techadvisor.dto.WorkspaceItemDTO;
-import com.example.techadvisor.repository.ProductRepository;
-import com.example.techadvisor.service.ProductService;
 import com.example.techadvisor.service.WorkspaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
