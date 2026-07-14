@@ -10,7 +10,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -34,8 +33,6 @@ class TechAdvisorMessagingService : FirebaseMessagingService() {
         val body = data["body"] ?: "Bạn có gợi ý sản phẩm mới."
         val productId = data["productId"]
         val imageUrl = data["imageUrl"]
-
-        Log.d("image", "onMessageReceived: $imageUrl")
 
         CoroutineScope(Dispatchers.IO).launch {
             val bitmap = imageUrl

@@ -16,7 +16,6 @@ class RecommendationRepositoryImpl @Inject constructor(
         return try {
             val serverCategory = if (category == "All") null else category
 
-            // Truyền page và pageSize vào hàm gọi API
             val response = recommendationApi.getHomeScreenProducts(
                 category = serverCategory,
                 page = page,
@@ -39,7 +38,6 @@ class RecommendationRepositoryImpl @Inject constructor(
             val response = recommendationApi.getSimilarProducts(productId)
             if (response.isSuccessful) {
                 val similarProducts = response.body() ?: emptyList()
-//                val similar = allProducts.filter { it.id != productId }.take(4)
                 Result.success(similarProducts)
             } else {
                 Result.failure(Exception("Lỗi API"))

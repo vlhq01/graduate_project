@@ -27,7 +27,7 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private ProductMapper productMapper; // Tiêm Mapper vào
+    private ProductMapper productMapper;
     @Autowired
     private AiServiceClient aiServiceClient;
     @Autowired
@@ -52,7 +52,6 @@ public class ProductService {
 
     public List<ProductDTO> searchProducts(String query, String userId) {
 
-        // 1. LƯU LỊCH SỬ TÌM KIẾM
         if (userId != null && !query.trim().isEmpty()) {
             SearchHistory history = new SearchHistory();
             history.setUserId(userId);

@@ -102,43 +102,23 @@ class HomeViewModel @Inject constructor(
 
             val categoriesDeferred = async { getCategoriesUseCase() }
 
-            val suggestionsDeferred = async { getHomeScreenUseCase(category = "All", page = 1, pageSize = 3) }
+            val suggestionsDeferred =
+                async { getHomeScreenUseCase(category = "All", page = 1, pageSize = 3) }
 
             val categoriesResult = categoriesDeferred.await()
             val suggestionsResult = suggestionsDeferred.await()
 
-            // Update State
             _state.update { currentState ->
                 currentState.copy(
                     isLoading = false,
                     categories = categoriesResult.getOrDefault(emptyList()).toPersistentList(),
-                    searchSuggestions = suggestionsResult.getOrDefault(emptyList()).toPersistentList()
+                    searchSuggestions = suggestionsResult.getOrDefault(emptyList())
+                        .toPersistentList()
                 )
             }
         }
     }
-    // vì products đã được Paging 3 tự động kích hoạt khi UI collect `productsPagingFlow`
-    private fun loadCategories() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
 
-            getCategoriesUseCase()
-                .onSuccess { categories ->
-                    _state.update {
-                        it.copy(
-                            isLoading = false,
-                            categories = categories.toPersistentList()
-                        )
-                    }
-                }
-                .onFailure { error ->
-                    _state.update { it.copy(isLoading = false, error = "Lỗi tải danh mục") }
-                    _effect.emit(HomeEffect.ShowError("Không thể tải danh mục trang chủ"))
-                }
-        }
-    }
-
-    // Chọn Category cực kỳ gọn! Chỉ update state, Paging 3 sẽ tự động làm nốt phần còn lại.
     private fun selectCategory(category: String) {
         if (_state.value.selectedCategory == category) return
         _state.update { it.copy(selectedCategory = category) }

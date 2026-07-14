@@ -1,7 +1,6 @@
 package com.example.graduateproject.presentation.auth
 
 sealed class AuthEvent {
-    // --- Sự kiện thay đổi giá trị trên Form ---
     data class NameChanged(val name: String) : AuthEvent()
     data class EmailChanged(val email: String) : AuthEvent()
     data class PhoneChanged(val phone: String) : AuthEvent()

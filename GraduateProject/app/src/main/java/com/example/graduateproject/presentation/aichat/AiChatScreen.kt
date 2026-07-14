@@ -97,10 +97,8 @@ fun AiChatScreen(
             .background(androidx.compose.material3.MaterialTheme.colorScheme.background) // Very light grey/white background
             .imePadding()
     ) {
-        // 1. Top Bar
         ChatTopBar()
 
-        // 2. Chat History
         LazyColumn(
             state = listState,
             modifier = Modifier
@@ -114,7 +112,6 @@ fun AiChatScreen(
             }
         }
 
-        // 3. Input Bar
         ChatInputBar(onSendMessage = {
             aiChatViewModel.processIntent(AiChatIntent.UpdateInput(it)); aiChatViewModel.processIntent(
             AiChatIntent.SendMessage
@@ -133,7 +130,6 @@ fun ChatTopBar() {
             .padding(horizontal = 28.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // AI Avatar
         Surface(
             modifier = Modifier
                 .size(40.dp)
@@ -142,7 +138,6 @@ fun ChatTopBar() {
             color = Color.Transparent,
             shape = CircleShape
         ) {
-            // Replace with your actual AI star icon
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.aiicon), // Placeholder
                 contentDescription = "AI",
@@ -176,12 +171,10 @@ fun ChatBubble(message: ChatMessage, onClick: (String) -> Unit) {
     val backgroundColor = if (isUser) Color(0xFFFBE6DD) else Color(0xFFD8F5E6) // Peach vs Mint
     val textColor = if (isUser) Color(0xFF5A2A18) else Color(0xFF064E3B) // Dark brown vs Dark green
 
-    // Align right for user, left for AI
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = if (isUser) Alignment.End else Alignment.Start
     ) {
-        // Text Bubble
         Surface(
             color = backgroundColor,
             shape = RoundedCornerShape(
@@ -200,7 +193,6 @@ fun ChatBubble(message: ChatMessage, onClick: (String) -> Unit) {
             )
         }
 
-        // If the AI recommended a product, show the card right below the bubble
         if (!isUser) {
             Spacer(modifier = Modifier.height(8.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -337,20 +329,17 @@ fun AiChatProductImageCarousel(
     images: List<String>,
     modifier: Modifier = Modifier
 ) {
-    // 1. Create the PagerState, which holds the current page
     val pagerState = rememberPagerState(pageCount = { images.size })
 
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .aspectRatio(1f) // Square aspect ratio
+            .aspectRatio(1f)
     ) {
-        // 2. The HorizontalPager, which allows swiping between images
         HorizontalPager(
             state = pagerState,
-//            userScrollEnabled = false,
             modifier = Modifier.fillMaxSize()
-        ) { page -> // The 'page' is the index of the image to display
+        ) { page ->
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(images[page])
@@ -364,19 +353,17 @@ fun AiChatProductImageCarousel(
             )
         }
 
-        // 3. The Dot Indicators
         Row(
             modifier = Modifier
-                .align(Alignment.BottomCenter) // Position at the bottom center
+                .align(Alignment.BottomCenter)
                 .padding(bottom = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            // Iterate for the number of images
             repeat(images.size) { index ->
                 val color = if (pagerState.currentPage == index) {
-                    Color.White // Color for the active dot
+                    Color.White
                 } else {
-                    Color.White.copy(alpha = 0.5f) // Color for inactive dots
+                    Color.White.copy(alpha = 0.5f)
                 }
                 Box(
                     modifier = Modifier
@@ -393,7 +380,6 @@ fun AiChatProductImageCarousel(
 fun ChatInputBar(onSendMessage: (String) -> Unit) {
     var text by remember { mutableStateOf("") }
 
-    // Adds a nice gradient fade behind the input bar so it doesn't clash with scrolling text
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -408,12 +394,12 @@ fun ChatInputBar(onSendMessage: (String) -> Unit) {
                 )
             )
             .padding(horizontal = 16.dp, vertical = 12.dp)
-            .padding(bottom = 8.dp) // Extra padding for the very bottom
+            .padding(bottom = 8.dp)
     ) {
         Surface(
             shape = RoundedCornerShape(24.dp),
             color = androidx.compose.material3.MaterialTheme.colorScheme.surface,
-            shadowElevation = 4.dp, // Soft shadow
+            shadowElevation = 4.dp,
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(
@@ -442,12 +428,11 @@ fun ChatInputBar(onSendMessage: (String) -> Unit) {
                     }
                 )
 
-                // Send Button
                 IconButton(
                     onClick = {
                         if (text.isNotBlank()) {
                             onSendMessage(text)
-                            text = "" // Clear input after sending
+                            text = ""
                         }
                     },
                     modifier = Modifier.size(36.dp)

@@ -85,7 +85,6 @@ fun ProductDetailsScreen(
     val product = productDetailsViewModel.state.collectAsState().value.product
     val gridState = rememberLazyStaggeredGridState()
     val similarProducts = productDetailsViewModel.state.collectAsState().value.similarProducts
-    Log.d("ggg", "ProductDetailsScreen: $product")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -164,7 +163,7 @@ fun ProductHeaderImages(images: List<String>, onBackClick: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(350.dp) // Chiều cao ảnh
+            .height(350.dp)
             .background(MaterialTheme.colorScheme.surfaceVariant)
     ) {
         HorizontalPager(
@@ -224,7 +223,6 @@ fun ProductHeaderImages(images: List<String>, onBackClick: () -> Unit) {
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // Nút Back/Close
             IconButton(
                 onClick = onBackClick,
                 modifier = Modifier
@@ -240,7 +238,7 @@ fun ProductHeaderImages(images: List<String>, onBackClick: () -> Unit) {
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 IconButton(
-                    onClick = { /* Share */ },
+                    onClick = { },
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.surface, CircleShape)
                         .size(40.dp)
@@ -252,7 +250,7 @@ fun ProductHeaderImages(images: List<String>, onBackClick: () -> Unit) {
                     )
                 }
                 IconButton(
-                    onClick = { /* Favorite */ },
+                    onClick = { },
                     modifier = Modifier
                         .background(MaterialTheme.colorScheme.surface, CircleShape)
                         .size(40.dp)
@@ -391,7 +389,6 @@ fun DetailSpecChip(title: String, value: String, index: Int) {
         )
     ) {
         Row(modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
-            // 2. Tên thông số (Power, Battery...) -> Giữ màu xám cho tinh tế
             Text(
                 text = "$title ",
                 color = Color.Gray,

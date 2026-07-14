@@ -244,7 +244,6 @@ fun HomeScreen(
             Box(modifier = Modifier.weight(1f)) {
 
 
-
                 ProductStaggeredGrid(products = pagingProducts, onClick = onProductClick)
 
                 if (homeState.isSearchActive) {
@@ -643,11 +642,13 @@ fun ProductStaggeredGrid(
                     CircularProgressIndicator(modifier = Modifier.wrapContentSize())
                 }
             }
+
             is LoadState.Error -> {
                 item(span = StaggeredGridItemSpan.FullLine) {
                     Text("Lỗi khi tải thêm dữ liệu!")
                 }
             }
+
             else -> {}
         }
     }

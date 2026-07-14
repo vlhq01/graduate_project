@@ -33,7 +33,6 @@ class AuthViewModel @Inject constructor(
 
     fun onEvent(event: AuthEvent) {
         when (event) {
-            // --- 1. Xử lý cập nhật dữ liệu form ---
             is AuthEvent.NameChanged -> {
                 _state.update { it.copy(nameInput = event.name) }
             }
@@ -58,13 +57,10 @@ class AuthViewModel @Inject constructor(
                 _state.update { it.copy(isTermsAccepted = event.isAccepted) }
             }
 
-            // --- 2. Xử lý các nút bấm hành động ---
             is AuthEvent.LoginClicked -> {
-                // Đọc giá trị trực tiếp từ state hiện tại
                 val email = _state.value.emailInput
                 val pass = _state.value.passwordInput
 
-                // (Tùy chọn) Validate nhẹ ở đây
                 if (email.isBlank() || pass.isBlank()) {
                     _state.update { it.copy(error = "Vui lòng nhập email và mật khẩu") }
                     return
@@ -76,7 +72,6 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.RegisterClicked -> {
                 val currentState = _state.value
 
-                // Validate form đăng ký
                 if (currentState.passwordInput != currentState.confirmPasswordInput) {
                     _state.update { it.copy(error = "Mật khẩu xác nhận không khớp!") }
                     return
@@ -112,7 +107,6 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    // --- 3. Gọi UseCase (Thực hiện gọi API / Firebase) ---
     private fun login(email: String, pass: String) {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true, error = null) }

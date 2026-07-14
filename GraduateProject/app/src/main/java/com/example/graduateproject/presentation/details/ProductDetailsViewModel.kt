@@ -51,7 +51,6 @@ class ProductDetailsViewModel @Inject constructor(
             val similarResult = similarDeferred.await()
 
             detailResult.onSuccess { product ->
-                // Tính % giảm giá
                 var discount = 0
                 if (product.price.original != null && product.price.original > product.price.usd) {
                     discount =
@@ -63,7 +62,6 @@ class ProductDetailsViewModel @Inject constructor(
                         isLoading = false,
                         product = product,
                         discountPercent = discount,
-                        // Nếu lấy similar thành công thì map vào, nếu lỗi thì để list rỗng
                         similarProducts = similarResult.getOrDefault(emptyList()).toPersistentList()
                     )
                 }

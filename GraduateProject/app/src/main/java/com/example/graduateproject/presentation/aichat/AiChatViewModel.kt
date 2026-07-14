@@ -57,7 +57,6 @@ class AiChatViewModel @Inject constructor(
         if (query.isEmpty() || _state.value.isAiTyping) return
 
         viewModelScope.launch {
-            // 1. Cập nhật UI ngay lập tức: Xóa ô input, thêm tin nhắn User, hiện loading AI
             val userMessage = ChatMessage(
                 id = UUID.randomUUID().toString(),
                 sender = ChatSender.USER,
@@ -74,7 +73,6 @@ class AiChatViewModel @Inject constructor(
             }
             _effect.emit(AiChatEffect.ScrollToBottom)
 
-            // 2. Gọi API thông qua UseCase
             sendMessageToAiUseCase(query)
                 .onSuccess { aiResponse ->
                     _state.update {
